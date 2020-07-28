@@ -1,4 +1,3 @@
-
 {
   "swagger": "2.0",
   "info": {
@@ -30,59 +29,19 @@
     "Bearer": {
       "type": "apiKey",
       "name": "Authorization",
-    "description": " value must be Bearer <my own JWT token>",
+      "description": " value must be Bearer <my own JWT token>",
       "in": "header",
-      "value":"Bearer "
+      "value": "Bearer "
     }
   },
   "paths": {
-    "/auth/local": {
-      "post": {
-        "tags": [
-          "auth"
-        ],
-        "summary": "login with email password",
-        "description": "",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "give valid user credentials to get authenticate token",
-            "required": true,
-            "schema": {
-              "type":"object",
-              "required":["email","password"],
-              "properties":{
-                "email":{"type":"string"},
-                "password":{"type":"string"}
-              }
-            }
-          }
-        ],
-        "responses": {
-          "401": {
-            "description": "Invalid Data"
-          },
-          "404":{
-            "description":"Something went wrong, please try again."
-          }
-        }
-      }
-    },
     "/api/agents": {
       "post": {
         "tags": [
           "agent"
         ],
         "summary": "Create agent",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "createUser",
+        "description": "This can only be done by the token validation.",
         "produces": [
           "application/json"
         ],
@@ -90,15 +49,50 @@
           {
             "in": "body",
             "name": "body",
-            "description": "Created user object",
+            "description": "Created Agent , Client",
             "required": true,
             "schema": {
-              "type":"object",
-              "required":["email","password","companyname"],
-              "properties":{
-                "email":{"type":"string"},
-                "password":{"type":"string"},
-                "companyname":{"type":"string"}
+              "type": "object",
+              "required": [
+                "agencyDetails",
+                "clientDetails"
+              ],
+              "properties": {
+                "agencyDetails":{"type":"object","properties":{
+                  "name": {
+                    "type": "string", "required":true
+                  },
+                  "address1": {
+                    "type": "string","required":true
+                  },
+                  "address2":{"type":"string"},
+                  "state": {
+                    "type": "string","required":true
+                  },
+                  "city": {
+                    "type": "string","required":true
+                  },
+                  "phonenumber": {
+                    "type": "string","required":true
+                  }
+                  
+                  }},
+                "clientDetails":{"type":"object","properties":{
+                  "name": {
+                    "type": "string", "required":true
+                  },
+                  "email": {
+                    "type": "string","required":true
+                  },
+                  "totalbill": {
+                    "type": "string","required":true
+                  },
+                  "phonenumber": {
+                    "type": "string","required":true
+                  }
+
+                  }}
+               
               }
             }
           }
@@ -107,15 +101,101 @@
           "default": {
             "description": "successful operation"
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/clients/{clientId}":{
+      "put": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Update Client",
+        "description": "Update specific  Client.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "description": "client  id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update Client",
+            "required": true,
+            "schema": {
+              "type":"object",
+              "required":["name","email","totalbill","phonenumber"],
+              "properties":{
+                "name": {
+                  "type": "string", "required":true
+                },
+                "email": {
+                  "type": "string","required":true
+                },
+                "totalbill": {
+                  "type": "string","required":true
+                },
+                "phonenumber": {
+                  "type": "string","required":true
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/clients":{
+      "get": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Get All Clients With order by Total Mount",
+        "description": "Get All Clients.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     }
-    
-   
   },
   "definitions": {
-    "City":{"type":"object",
-      "properties":{"id":"string","name":"string"}
+    "City": {
+      "type": "object",
+      "properties": {
+        "id": "string",
+        "name": "string"
+      }
     },
     "Category": {
       "type": "object",
@@ -130,108 +210,6 @@
       },
       "xml": {
         "name": "Category"
-      }
-    },
-    "User": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "username": {
-          "type": "string"
-        },
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "phone": {
-          "type": "string"
-        },
-        "userStatus": {
-          "type": "integer",
-          "format": "int32",
-          "description": "User Status"
-        }
-      },
-      "xml": {
-        "name": "User"
-      }
-    },
-    "Tag": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "xml": {
-        "name": "Tag"
-      }
-    },
-    "Pet": {
-      "type": "object",
-      "required": [
-        "name",
-        "photoUrls"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "category": {
-          "$ref": "#/definitions/Category"
-        },
-        "name": {
-          "type": "string",
-          "example": "doggie"
-        },
-        "photoUrls": {
-          "type": "array",
-          "xml": {
-            "name": "photoUrl",
-            "wrapped": true
-          },
-          "items": {
-            "type": "string"
-          }
-        },
-        "tags": {
-          "type": "array",
-          "xml": {
-            "name": "tag",
-            "wrapped": true
-          },
-          "items": {
-            "$ref": "#/definitions/Tag"
-          }
-        },
-        "status": {
-          "type": "string",
-          "description": "pet status in the store",
-          "enum": [
-            "available",
-            "pending",
-            "sold"
-          ]
-        }
-      },
-      "xml": {
-        "name": "Pet"
       }
     },
     "ApiResponse": {

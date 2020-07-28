@@ -12,12 +12,12 @@ var mongoose = require('mongoose');
 var config = require('./config/environment');
 
 // Connect to database
-mongoose.connect(config.mongo.uri, config.mongo.options);
-mongoose.connection.on('error', function(err) {
-	console.error('MongoDB connection error: ' + err);
-	process.exit(-1);
-	}
-);
+mongoose.connect(config.mongo.uri, { useNewUrlParser: true ,useUnifiedTopology:true});
+mongoose.connection.once('open', function(){
+  console.log('Conection has been made!');
+}).on('error', function(error){
+    console.log('Error is: ', error);
+});
 // Populate DB with sample data
 if(config.seedDB) { require('./config/seed'); }
 

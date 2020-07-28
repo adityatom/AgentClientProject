@@ -25,7 +25,9 @@ function isAuthenticated() {
     })
     // Attach Agent to request
     .use(function(req, res, next) {
-      Agent.findById(req.Agent._id, function (err, Agent) {
+      console.log(req);
+      
+      Agent.findById(req.user._id, function (err, Agent) {
         if (err) return next(err);
         if (!Agent) return res.status(401).send('Unauthorized');
 

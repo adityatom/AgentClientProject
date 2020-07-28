@@ -5,8 +5,8 @@
 module.exports = {
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/backend'
+    uri: 'mongodb+srv://user123:User@123@clusterarc.qmiom.mongodb.net/test'
   },
 
-  seedDB: true
+  seedDB: false
 };

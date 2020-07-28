@@ -11,13 +11,35 @@
 
 var _ = require('lodash');
 var Client = require('./client.model');
-
+var Agent = require('../agent/agent.model')
 // Get list of Clients
 exports.index = function(req, res) {
-  Client.find(function (err, Clients) {
-    if(err) { return handleError(res, err); }
-    return res.status(200).json(Clients);
-  });
+  Client.aggregate([
+    {$match:{}},
+    {
+        $lookup: {
+            from: Agent.collection.name,
+            let: { "agent": "$agencyId" },
+            pipeline: [{
+                $match: {
+                    $expr: { $eq: ["$_id", "$$agent"] },
+                }
+            }],
+            as: "agency"
+        }
+    }, {
+        $project: {
+            'AgencyName': { "$arrayElemAt": ["$agency.name", 0] },
+            'ClientName': "$name",
+            'totalbill':1,
+        },
+    },
+
+]).sort({ totalbill: 'desc' }).exec(function (err, clients) {
+    if (err) { return handleError(res, err); }
+    
+    return res.status(200).json(clients);
+})
 };
 
 // Get a single Client
