@@ -1,0 +1,253 @@
+
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a Agent Client server Api  management . ",
+    "version": "1.0.0",
+    "title": "Agent Client "
+  },
+  "host": "localhost:9000",
+  "basePath": "",
+  "tags": [
+    {
+      "name": "auth",
+      "description": "includes login of user"
+    },
+    {
+      "name": "agent",
+      "description": "Apis in Agent Controller"
+    },
+    {
+      "name": "client",
+      "description": "Api included in Client Controller"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+    "description": " value must be Bearer <my own JWT token>",
+      "in": "header",
+      "value":"Bearer "
+    }
+  },
+  "paths": {
+    "/auth/local": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "login with email password",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "give valid user credentials to get authenticate token",
+            "required": true,
+            "schema": {
+              "type":"object",
+              "required":["email","password"],
+              "properties":{
+                "email":{"type":"string"},
+                "password":{"type":"string"}
+              }
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Invalid Data"
+          },
+          "404":{
+            "description":"Something went wrong, please try again."
+          }
+        }
+      }
+    },
+    "/api/agents": {
+      "post": {
+        "tags": [
+          "agent"
+        ],
+        "summary": "Create agent",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "createUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "type":"object",
+              "required":["email","password","companyname"],
+              "properties":{
+                "email":{"type":"string"},
+                "password":{"type":"string"},
+                "companyname":{"type":"string"}
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+    
+   
+  },
+  "definitions": {
+    "City":{"type":"object",
+      "properties":{"id":"string","name":"string"}
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Category"
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "username": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "userStatus": {
+          "type": "integer",
+          "format": "int32",
+          "description": "User Status"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "Tag": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Tag"
+      }
+    },
+    "Pet": {
+      "type": "object",
+      "required": [
+        "name",
+        "photoUrls"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "name": {
+          "type": "string",
+          "example": "doggie"
+        },
+        "photoUrls": {
+          "type": "array",
+          "xml": {
+            "name": "photoUrl",
+            "wrapped": true
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "xml": {
+            "name": "tag",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/Tag"
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "pet status in the store",
+          "enum": [
+            "available",
+            "pending",
+            "sold"
+          ]
+        }
+      },
+      "xml": {
+        "name": "Pet"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
