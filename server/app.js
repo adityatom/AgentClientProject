@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 var config = require('./config/environment');
 
 // Connect to database
-mongoose.connect(config.mongo.uri, { useNewUrlParser: true ,useUnifiedTopology:true});
+mongoose.connect(config.mongo.uri, { useNewUrlParser: true});
 mongoose.connection.once('open', function(){
   console.log('Conection has been made!');
 }).on('error', function(error){
