@@ -10,9 +10,10 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
+const db = process.env.MONGODB_URL || config.mongo.uri;
 
 // Connect to database
-mongoose.connect(config.mongo.uri, { useNewUrlParser: true ,useUnifiedTopology:true});
+mongoose.connect(db, { useNewUrlParser: true ,useUnifiedTopology:true});
 mongoose.connection.once('open', function(){
   console.log('Conection has been made!');
 }).on('error', function(error){
