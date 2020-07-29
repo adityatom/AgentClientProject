@@ -19,6 +19,8 @@ module.exports = function(app) {
   
   app.use(express.static(path.join(__dirname, './static'))); // server side files rendering 
   app.use(express.static('./static/'));
+  console.log(swaggerDocument);
+  
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); // swagger path
 
 
