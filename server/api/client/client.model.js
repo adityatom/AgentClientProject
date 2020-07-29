@@ -9,7 +9,7 @@ var ClientSchema = new Schema({
   agencyId: {type:Schema.Types.ObjectId,ref:'Agency'},
   name: {type:String,required:true},
   email: {type:String,required:true},
-  totalbill: {type:String,required:true},
+  totalbill: {type:Number,required:true},
   phonenumber: { type: String, required: true },
 });
 

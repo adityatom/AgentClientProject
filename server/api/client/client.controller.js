@@ -34,8 +34,13 @@ exports.index = function(req, res) {
             'totalbill':1,
         },
     },
+    {
+      $sort: {
+        totalbill:-1
+    }
 
-]).sort({ totalbill: 'desc' }).exec(function (err, clients) {
+    },
+]).exec(function (err, clients) {
     if (err) { return handleError(res, err); }
     
     return res.status(200).json(clients);
