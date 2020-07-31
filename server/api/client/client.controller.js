@@ -42,8 +42,16 @@ exports.index = function(req, res) {
     },
 ]).exec(function (err, clients) {
     if (err) { return handleError(res, err); }
-    
-    return res.status(200).json(clients);
+    if(clients){
+      var obj = clients.reduce((r, o) => (o.totalbill < (r[o.AgencyName] || {}).totalbill || (r[o.AgencyName] = o), r), {});
+
+      
+    return res.status(200).json(obj);
+
+    }
+  
+
+
 })
 };
 
