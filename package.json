@@ -14,7 +14,7 @@
     "express-session": "~1.0.2",
     "generator-node-express-mongo": "^2.1.7",
     "jsonwebtoken": "^5.0.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "method-override": "~1.0.0",
     "mongoose": "^5.9.11",
     "morgan": "~1.0.0",
